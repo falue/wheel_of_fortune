@@ -13,7 +13,7 @@
 // Define the array of leds
 CRGB leds[NUM_LEDS];
 
-int ledPin = 13;
+int ledPin = 6;
 int photoResistorPin = A0;
 int brightnessPin = A1;
 
