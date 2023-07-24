@@ -28,7 +28,10 @@ int decayPerLoop = 2;
 int bonusForRotation = 6;
 int speedMax = 400;
 bool triggeredPhoto = false;
-int photoThreshold = 100;
+int photoThreshold = 236;
+
+int min = 1024;
+int max = 0;
 
 // CRGB color = CRGB::White;
 ////// TO DO: check different whites; test if ::Red Works because of color ordering?
@@ -88,8 +91,8 @@ void loop() {
   // Turn on symmetry effect when fast turning
   if(speed > minSpeedForSymmetry) {
     Serial.print("\tSymmetry!");
-    leds[loopAround(NUM_LEDS-index-1, 0, NUM_LEDS-1)] = color;
-    // visual[loopAround(NUM_LEDS-index-2, 0, NUM_LEDS-1)] = '1';
+    leds[overflow(NUM_LEDS-index-1, 0, NUM_LEDS-1)] = color;
+    // visual[overflow(NUM_LEDS-index-2, 0, NUM_LEDS-1)] = '1';
   }
 
   if(speed <= minSpeed) {
@@ -97,7 +100,8 @@ void loop() {
     // wheel is standing still, show only top most
     fill_solid(leds, NUM_LEDS, CRGB(0, 0, 0));
     leds[0] = color;
-    // visual = '0000000000000000';
+  } else {
+    Serial.print("\tMovement!");
   }
 
   Serial.print("\tindex:\t");
@@ -107,11 +111,16 @@ void loop() {
   Serial.print("\tbrightness:\t");
   Serial.print(brightness);
   Serial.print("\tphotoResistorPin:\t");
+  Serial.print(readingPhotoDiode);
+  Serial.print(" = ");
   Serial.print(readingPhotoDiode > photoThreshold);
-  //Serial.print("\tvisual:\t");
-  //Serial.print(visual);
+  Serial.print("\tmin/max:\t");
+  Serial.print(min);
+  Serial.print("/");
+  Serial.print(max);
 
-
+  if(readingPhotoDiode < min) min = readingPhotoDiode;
+  if(readingPhotoDiode > max) max = readingPhotoDiode;
 
 
   
@@ -128,7 +137,7 @@ void loop() {
   Serial.println("");
 
   ///// TO DO: IF SPEED IS HIGH, MAKE wait SHORT
-  ///// SPLIT DELAY IN 100MS CHUNKS AND CHECK FOR ROTATION.
+  ///// SPLIT DELAY IN 20MS CHUNKS AND CHECK FOR ROTATION.
   bool hasNotTurned = true;
   while(wait > 0 && hasNotTurned) {
     delay(20);
@@ -137,8 +146,9 @@ void loop() {
     // because wheel has turned while waiting
     int difference = readingPhotoDiode - analogRead(photoResistorPin);
     hasNotTurned =  difference < 10 && difference > -10;
+    delay(wait);
   }
-  //delay(wait+20);
+  
   delay(20);
 }
 
@@ -146,6 +156,6 @@ int clamp(int value, int min, int max) {
   return value < min ? min : value > max ? max : value;
 }
 
-int loopAround(int value, int min, int max) {
+int overflow(int value, int min, int max) {
   return value < min ? max : value > max ? min : value;
 }
