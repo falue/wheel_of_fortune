@@ -32,6 +32,7 @@ int photoThreshold = 245;
 
 int min = 1024;
 int max = 0;
+int maxSpeed = 0;
 
 // CRGB color = CRGB::White;
 ////// TO DO: check different whites; test if ::Red Works because of color ordering?
