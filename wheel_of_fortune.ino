@@ -119,38 +119,23 @@ void loop() {
   Serial.print(min);
   Serial.print("/");
   Serial.print(max);
+  Serial.print("\tmaxSpeed:\t");
+  Serial.print(maxSpeed);
 
   if(readingPhotoDiode < min) min = readingPhotoDiode;
   if(readingPhotoDiode > max) max = readingPhotoDiode;
+  if(speed > maxSpeed) maxSpeed = speed;
 
-
-  
   FastLED.show();
 
-  // hrmmmgh
   // maybe do something not blocking?
-  // what happens if speed==0?
   int wait = 1000/speed;
   if(wait < 0) wait = 0;
   Serial.print("\twait:\t");
   Serial.print(wait);
 
   Serial.println("");
-
-  ///// TO DO: IF SPEED IS HIGH, MAKE wait SHORT
-  ///// SPLIT DELAY IN 20MS CHUNKS AND CHECK FOR ROTATION.
-  bool hasNotTurned = true;
-  while(wait > 0 && hasNotTurned) {
-    delay(20);
-    wait -= 20;
-    // if new reading of photoresistor is different than what was before, exit while loop
-    // because wheel has turned while waiting
-    int difference = readingPhotoDiode - analogRead(photoResistorPin);
-    hasNotTurned =  difference < 10 && difference > -10;
-    delay(wait);
-  }
-  
-  delay(20);
+  delay(wait+20);
 }
 
 int clamp(int value, int min, int max) {
