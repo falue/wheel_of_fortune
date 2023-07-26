@@ -66,8 +66,6 @@ void loop() {
   // Light up one LED at a time
   index = index+1 > NUM_LEDS-1 ? 0 : index+1;
   leds[index] = color;
-  // char* visual = '0000000000000000';
-  // visual[index] = '1';
 
   int readingPhotoDiode = analogRead(photoResistorPin);
 
@@ -93,7 +91,6 @@ void loop() {
   if(speed > minSpeedForSymmetry) {
     Serial.print("\tSymmetry!");
     leds[overflow(NUM_LEDS-index-1, 0, NUM_LEDS-1)] = color;
-    // visual[overflow(NUM_LEDS-index-2, 0, NUM_LEDS-1)] = '1';
   }
 
   if(speed <= minSpeed) {
