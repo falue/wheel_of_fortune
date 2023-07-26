@@ -22,13 +22,13 @@ int brightness = 255;
 int speed = 0;
 int index = 0;
 
-int minSpeedForSymmetry = 25;
+int minSpeedForSymmetry = 8;
 int minSpeed = 1;
-int decayPerLoop = 2;
-int bonusForRotation = 6;
+int decayPerLoop = 1;
+int bonusForRotation = 19;
 int speedMax = 400;
 bool triggeredPhoto = false;
-int photoThreshold = 236;
+int photoThreshold = 245;
 
 int min = 1024;
 int max = 0;
