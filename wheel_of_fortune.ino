@@ -51,9 +51,9 @@ void setup() {
     fill_solid(leds, NUM_LEDS, CRGB(0, 0, 0));
     FastLED.show();
     Serial.println("START");
+    blink(0, 4, 1200);
 
     digitalWrite(ledPin, HIGH);
-
   }
 
 void loop() { 
@@ -159,4 +159,19 @@ int clamp(int value, int min, int max) {
 
 int overflow(int value, int min, int max) {
   return value < min ? max : value > max ? min : value;
+}
+
+void blink(int ledNr, int times, int duration) {
+  if(times > 0 ) {
+    for (int i = 0; i <= times; i++) {
+      //digitalWrite(pin, HIGH);
+      leds[ledNr] = color;
+      FastLED.show();
+      delay(duration/(times*2));
+      //digitalWrite(pin, LOW);
+      leds[ledNr] = CRGB::Black;
+      FastLED.show();
+      delay(duration/(times*2));
+    }
+  }
 }
