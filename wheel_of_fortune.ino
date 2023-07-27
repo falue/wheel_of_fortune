@@ -22,13 +22,16 @@ int brightness = 255;
 int speed = 0;
 int index = 0;
 
-int minSpeedForSymmetry = 8;
-int minSpeed = 1;
-int decayPerLoop = 1;
-int bonusForRotation = 19;
-int speedMax = 400;
+int minSpeedForSymmetry = 33;  // min speed for symmetric lights (another LED is lit up, symmetrically to first one)
+bool reverse = true;  // if not symmetric light effect, reverse=true makes light go counter clockwise
+int decayPerLoop = 2;  // how fast light effect dies down. bigger number, faster stopping effect
+int bonusForRotation = 20;  // how fast the light effect speeds up. bigger number, faster turning
+int speedMax = 45;  // max speed of light effect
+int photoThreshold = 245;  // A little dependent on room light
+
+int basicSpeed = 50;  // basic loop ms delay
+int minSpeed = 0;
 bool triggeredPhoto = false;
-int photoThreshold = 245;
 
 int min = 1024;
 int max = 0;
@@ -54,6 +57,15 @@ void setup() {
     blink(0, 4, 1200);
 
     digitalWrite(ledPin, HIGH);
+
+    /*
+    fill_solid(leds, NUM_LEDS, color);
+    while(true) {
+      FastLED.setBrightness(map(analogRead(brightnessPin), 0,1024, 0, 255));
+      FastLED.show();
+      delay(2);
+    }*/
+
   }
 
 void loop() { 
@@ -65,7 +77,11 @@ void loop() {
 
   // Light up one LED at a time
   index = index+1 > NUM_LEDS-1 ? 0 : index+1;
-  leds[index] = color;
+  if(!reverse) {
+    leds[index] = color;
+  } else {
+    leds[overflow(NUM_LEDS-index-1, 0, NUM_LEDS-1)] = color;
+  }
 
   int readingPhotoDiode = analogRead(photoResistorPin);
 
@@ -90,7 +106,11 @@ void loop() {
   // Turn on symmetry effect when fast turning
   if(speed > minSpeedForSymmetry) {
     Serial.print("\tSymmetry!");
-    leds[overflow(NUM_LEDS-index-1, 0, NUM_LEDS-1)] = color;
+    if(!reverse) {
+      leds[overflow(NUM_LEDS-index-1, 0, NUM_LEDS-1)] = color;
+    } else {
+      leds[index] = color;
+    }
   }
 
   if(speed <= minSpeed) {
@@ -98,6 +118,7 @@ void loop() {
     // wheel is standing still, show only top most
     fill_solid(leds, NUM_LEDS, CRGB(0, 0, 0));
     leds[0] = color;
+    index=0;  // reset so effect starts again from LED 0!
   } else {
     Serial.print("\tMovement!");
   }
@@ -132,7 +153,7 @@ void loop() {
   Serial.print(wait);
 
   Serial.println("");
-  delay(wait+20);
+  delay(wait+basicSpeed);  // 20
 }
 
 int clamp(int value, int min, int max) {
