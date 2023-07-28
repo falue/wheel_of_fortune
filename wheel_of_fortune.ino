@@ -23,7 +23,7 @@ int speed = 0;
 int index = 0;
 
 int minSpeedForSymmetry = 33;  // min speed for symmetric lights (another LED is lit up, symmetrically to first one)
-bool reverse = true;  // if not symmetric light effect, reverse=true makes light go counter clockwise
+bool reverse = false;  // if not symmetric light effect, reverse=true makes light go counter clockwise
 int decayPerLoop = 2;  // how fast light effect dies down. bigger number, faster stopping effect
 int bonusForRotation = 20;  // how fast the light effect speeds up. bigger number, faster turning
 int speedMax = 45;  // max speed of light effect
