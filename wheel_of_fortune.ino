@@ -22,6 +22,8 @@ int brightness = 255;
 int speed = 0;
 int index = 0;
 
+// CHANGE THESE VALUES TO YOUR LIKING
+CRGB color = CRGB::White;
 int minSpeedForSymmetry = 33;  // min speed for symmetric lights (another LED is lit up, symmetrically to first one)
 bool reverse = false;  // if not symmetric light effect, reverse=true makes light go counter clockwise
 int decayPerLoop = 2;  // how fast light effect dies down. bigger number, faster stopping effect
@@ -29,6 +31,7 @@ int bonusForRotation = 20;  // how fast the light effect speeds up. bigger numbe
 int speedMax = 45;  // max speed of light effect
 int photoThreshold = 245;  // A little dependent on room light
 
+// DO NOT TOUCH
 int basicSpeed = 50;  // basic loop ms delay
 int minSpeed = 0;
 bool triggeredPhoto = false;
@@ -37,9 +40,7 @@ int min = 1024;
 int max = 0;
 int maxSpeed = 0;
 
-// CRGB color = CRGB::White;
-////// TO DO: check different whites; test if ::Red Works because of color ordering?
-CRGB color = CRGB::White;
+
 
 void setup() { 
     Serial.begin(9600); // Initialize serial communication for printing potentiometer values
